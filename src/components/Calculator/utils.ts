@@ -10,13 +10,17 @@ const getAllExceptLastLetter = (word: string): string =>
 const getLastLetter = (word: string): string => word.slice(-1);
 
 const getArithmeticOperation = (result: string, key: string): string => {
-  const operation = `${result}${key}`.replace("=", "");
+  const operation = `${result}${key}`.replace(keys[keys.length - 1].label, "");
 
-  if (operation.includes(keys[2].label))
-    return operation.replace(keys[2].label, "/");
+  const operatorDivision = operation.includes(keys[2].label);
+  const operatorMultiplication = operation.includes(keys[6].label);
 
-  if (operation.includes(keys[6].label))
-    return operation.replace(keys[6].label, "*");
+  if (operatorDivision && operatorMultiplication)
+    return operation.replace(keys[2].label, "/").replace(keys[6].label, "*");
+
+  if (operatorDivision) return operation.replace(keys[2].label, "/");
+
+  if (operatorMultiplication) return operation.replace(keys[6].label, "*");
 
   return operation;
 };

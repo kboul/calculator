@@ -17,13 +17,15 @@ export default function Calculator() {
 
   const equalOperator = (label: string) => {
     const lastResultLetter = getLastLetter(result);
-    if (operators.includes(lastResultLetter)) return;
+    if (operators.includes(lastResultLetter) || result === "") return;
 
     const arithmeticOperation = getArithmeticOperation(result, label);
     setResult(eval(arithmeticOperation).toString());
   };
 
   const changeResult = (label: string) => {
+    if (result === "" && operators.includes(label)) return;
+
     const lastResultLetter = getLastLetter(result);
     const isLastTypedKeyAnOperation = operators.includes(label);
     const isLastLetterAnOperation = operators.includes(lastResultLetter);
