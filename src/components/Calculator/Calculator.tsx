@@ -4,16 +4,17 @@ import {
   getAllExceptLastLetter,
   getArithmeticOperation,
   getLastLetter,
-  operators,
+  operators
 } from "./utils";
 import { initialResult, keys } from "./constants";
 import "./Calculator.sass";
 
 export default function Calculator() {
   const [result, setResult] = useState(initialResult);
+  const [equalOperatorClicked, setEqualOperatorClicked] = useState(false);
 
   const clearOperator = () =>
-    setResult((prevResult) => getAllExceptLastLetter(prevResult));
+    setResult(prevResult => getAllExceptLastLetter(prevResult));
 
   const equalOperator = (label: string) => {
     const lastResultLetter = getLastLetter(result);
@@ -21,27 +22,33 @@ export default function Calculator() {
 
     const arithmeticOperation = getArithmeticOperation(result, label);
     setResult(eval(arithmeticOperation).toString());
+    setEqualOperatorClicked(true);
   };
 
   const changeResult = (label: string) => {
-    if (result === "" && operators.includes(label)) return;
+    const keyIsAnOperator = operators.includes(label);
+    if (result === "" && keyIsAnOperator) return;
 
     const lastResultLetter = getLastLetter(result);
-    const isLastTypedKeyAnOperation = operators.includes(label);
     const isLastLetterAnOperation = operators.includes(lastResultLetter);
-    if (isLastTypedKeyAnOperation && isLastLetterAnOperation)
-      return setResult((prevResult) =>
-        prevResult.replace(getLastLetter(prevResult), label)
+    if (keyIsAnOperator && isLastLetterAnOperation)
+      return setResult(
+        prevResult => `${getAllExceptLastLetter(prevResult)}${label}`
       );
 
-    setResult((prevResult) => {
+    const userTypedAfterResult = equalOperatorClicked && !keyIsAnOperator;
+    const userTypedMinusAfterResult =
+      !keyIsAnOperator || label === keys[10].label;
+    setResult(prevResult => {
       if (
-        prevResult === initialResult &&
-        (!operators.includes(label) || label === keys[10].label)
+        userTypedAfterResult ||
+        (prevResult === initialResult && userTypedMinusAfterResult)
       )
         return label;
       return prevResult + label;
     });
+
+    if (equalOperatorClicked) setEqualOperatorClicked(false);
   };
 
   const handleKeyClick = (label: string) => () => {
@@ -58,17 +65,16 @@ export default function Calculator() {
   };
 
   return (
-    <div className='wrapper'>
-      <div className='buttonsWrapper'>
-        <div className='result'>{result}</div>
+    <div className="wrapper">
+      <div className="buttonsWrapper">
+        <div className="result">{result}</div>
 
         {keys.map(({ id, label, className }) => (
           <button
             className={`button ${className}`}
             key={id}
             onClick={handleKeyClick(label)}
-            type='button'
-          >
+            type="button">
             {label}
           </button>
         ))}
