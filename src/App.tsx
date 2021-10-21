@@ -1,5 +1,5 @@
-function App() {
-  return <div>Hello World</div>;
-}
+import Calculator from "./components/Calculator/Calculator";
 
-export default App;
+export default function App() {
+  return <Calculator />;
+}
