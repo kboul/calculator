@@ -47,6 +47,9 @@
           "./src/setupTests.ts"
         ]
       }
-    ]
+    ],
+    "import/prefer-default-export": "off",
+    "no-eval": "off",
+    "consistent-return": "off"
   }
 }
