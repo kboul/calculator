@@ -37,12 +37,10 @@ export default function Calculator() {
       );
 
     const userTypedAfterResult = equalOperatorClicked && !keyIsAnOperator;
-    const userTypedMinusAfterResult =
-      !keyIsAnOperator || label === keys[10].label;
     setResult(prevResult => {
       if (
         userTypedAfterResult ||
-        (prevResult === initialResult && userTypedMinusAfterResult)
+        (prevResult === initialResult && !keyIsAnOperator)
       )
         return label;
       return prevResult + label;
@@ -67,7 +65,9 @@ export default function Calculator() {
   return (
     <div className="wrapper">
       <div className="buttonsWrapper">
-        <div className="result">{result}</div>
+        <div aria-label="result" className="result">
+          {result}
+        </div>
 
         {keys.map(({ id, label, className }) => (
           <button

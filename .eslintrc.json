@@ -1,7 +1,8 @@
 {
   "env": {
     "browser": true,
-    "es6": true
+    "es6": true,
+    "jest": true
   },
   "extends": [
     "eslint:recommended",
@@ -9,7 +10,10 @@
     "plugin:@typescript-eslint/eslint-recommended",
     "airbnb",
     "prettier",
-    "plugin:import/typescript"
+    "plugin:import/typescript",
+    "plugin:testing-library/recommended",
+    "plugin:testing-library/react",
+    "plugin:jest-dom/recommended"
   ],
   "globals": {
     "Atomics": "readonly",
@@ -23,7 +27,13 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins": ["react", "@typescript-eslint", "prettier"],
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "prettier",
+    "testing-library",
+    "jest-dom"
+  ],
   "rules": {
     "react/react-in-jsx-scope": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
