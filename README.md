@@ -2,10 +2,32 @@
 
 A react app with typescript to make your personal calculations on the web!
 
-### `npm start`
+## Install project dependencies
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+From root folder run
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```
+npm i or npm install
+```
+
+## Starting the app
+
+```
+npm start
+```
+
+The server will be found at [localhost:3000](http://localhost:3000).
+
+## Testing
+
+```
+npm test
+```
+
+## Test coverage
+
+```
+npm run test:coverage
+```
+
+Then, navigate and open esa_react/coverage/Icov-report/index.html to see the test statistics.
