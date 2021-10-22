@@ -32,7 +32,17 @@ const getArithmeticOperation = (result: string, key: string): string => {
   return operation;
 };
 
+const adjustToKeyboardKeys = (label: string): string => {
+  if (label === keys[6].label) return "*";
+  if (label === keys[2].label) return "/";
+  if (label === keys[keys.length - 1].label) return "Enter";
+  if (label === keys[1].label) return "Backspace";
+  if (label === keys[0].label) return "Escape";
+  return label;
+};
+
 export {
+  adjustToKeyboardKeys,
   getAllExceptLastLetter,
   getArithmeticOperation,
   getLastLetter,

@@ -1,6 +1,8 @@
 import { useState } from "react";
 
+import useKeyPress from "./hooks";
 import {
+  adjustToKeyboardKeys,
   getAllExceptLastLetter,
   getArithmeticOperation,
   getLastLetter,
@@ -12,6 +14,10 @@ import "./Calculator.sass";
 export default function Calculator() {
   const [result, setResult] = useState(initialResult);
   const [equalOperatorClicked, setEqualOperatorClicked] = useState(false);
+
+  keys.forEach(({ label }) => {
+    useKeyPress(adjustToKeyboardKeys(label), () => handleKeyClick(label)());
+  });
 
   const clearOperator = () =>
     setResult(prevResult => getAllExceptLastLetter(prevResult));
@@ -27,7 +33,7 @@ export default function Calculator() {
 
   const changeResult = (label: string) => {
     const keyIsAnOperator = operators.includes(label);
-    if (result === "" && keyIsAnOperator) return;
+    if (!result && keyIsAnOperator) return;
 
     const lastResultLetter = getLastLetter(result);
     const isLastLetterAnOperation = operators.includes(lastResultLetter);

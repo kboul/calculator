@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import Calculator from ".";
@@ -206,4 +206,17 @@ test("user performs a calculation and after equal operator is clicked a new calc
   expect(result.innerHTML).toBe("18");
   userEvent.click(twoKey);
   expect(result.innerHTML).toBe("2");
+});
+
+test("user types from keyboard instead of calculator buttons", async () => {
+  fireEvent.keyUp(window, { key: "1", code: 49 });
+  fireEvent.keyUp(window, { key: "2", code: 50 });
+  fireEvent.keyUp(window, { key: "-", code: 189 });
+  fireEvent.keyUp(window, { key: "6", code: 54 });
+  fireEvent.keyUp(window, { key: "Enter", code: 12 });
+
+  await waitFor(async () => {
+    const newResult = await screen.findByLabelText("result");
+    expect(newResult.innerHTML).toBe("6");
+  });
 });
