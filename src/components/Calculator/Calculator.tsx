@@ -19,8 +19,7 @@ export default function Calculator() {
     useKeyPress(adjustToKeyboardKeys(label), () => handleKeyClick(label)());
   });
 
-  const clearOperator = () =>
-    setResult(prevResult => getAllExceptLastLetter(prevResult));
+  const clearOperator = () => setResult(getAllExceptLastLetter);
 
   const equalOperator = (label: string) => {
     const lastResultLetter = getLastLetter(result);

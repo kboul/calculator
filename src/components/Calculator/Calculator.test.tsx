@@ -5,6 +5,7 @@ import Calculator from ".";
 import { initialResult, keys } from "./constants";
 
 let allClearKey: HTMLElement;
+let clearKey: HTMLElement;
 
 let divisionOperator: HTMLElement;
 let multiplicationOperator: HTMLElement;
@@ -27,6 +28,7 @@ beforeEach(() => {
   render(<Calculator />);
 
   allClearKey = screen.getByText(keys[0].label);
+  clearKey = screen.getByText(keys[1].label);
 
   divisionOperator = screen.getByText(keys[2].label);
   multiplicationOperator = screen.getByText(keys[6].label);
@@ -173,7 +175,11 @@ test("user performs multiple calculations correctly without receiving errors", (
     nineKey,
     subtractionOperator,
     sixKey,
+    fourKey,
+    clearKey,
     threeKey,
+    divisionOperator,
+    multiplicationOperator,
     additionOperator,
     twoKey,
     fiveKey,
@@ -191,7 +197,12 @@ test("user performs multiple calculations correctly without receiving errors", (
 test("user types an operator multile times and last operator is changed with the operator that was clicked last", () => {
   [
     threeKey,
+    divisionOperator,
+    additionOperator,
+    subtractionOperator,
     multiplicationOperator,
+    twoKey,
+    clearKey,
     fiveKey,
     divisionOperator,
     additionOperator
@@ -200,23 +211,34 @@ test("user types an operator multile times and last operator is changed with the
 });
 
 test("user performs a calculation and after equal operator is clicked a new calculation takes place", () => {
-  [sixKey, multiplicationOperator, threeKey, equalOperator].forEach(element =>
-    userEvent.click(element)
-  );
+  [
+    sixKey,
+    multiplicationOperator,
+    threeKey,
+    twoKey,
+    clearKey,
+    equalOperator
+  ].forEach(element => userEvent.click(element));
   expect(result.innerHTML).toBe("18");
   userEvent.click(twoKey);
   expect(result.innerHTML).toBe("2");
 });
 
 test("user types from keyboard instead of calculator buttons", async () => {
-  fireEvent.keyUp(window, { key: "1", code: 49 });
-  fireEvent.keyUp(window, { key: "2", code: 50 });
-  fireEvent.keyUp(window, { key: "-", code: 189 });
-  fireEvent.keyUp(window, { key: "6", code: 54 });
-  fireEvent.keyUp(window, { key: "Enter", code: 12 });
+  [
+    { key: "9", code: 57 },
+    { key: "Escape", code: 27 },
+    { key: "1", code: 49 },
+    { key: "2", code: 50 },
+    { key: "+", code: 107 },
+    { key: "×", code: 106 },
+    { key: "÷", code: 111 },
+    { key: "-", code: 189 },
+    { key: "6", code: 54 },
+    { key: "8", code: 56 },
+    { key: "Backspace", code: 8 },
+    { key: "Enter", code: 12 }
+  ].forEach(userAction => fireEvent.keyUp(window, userAction));
 
-  await waitFor(async () => {
-    const newResult = await screen.findByLabelText("result");
-    expect(newResult.innerHTML).toBe("6");
-  });
+  await waitFor(() => expect(result.innerHTML).toBe("6"));
 });
