@@ -15,7 +15,6 @@ const keys = [
   { label: "3", className: "three" },
   { label: "+", className: "operators" },
   { label: "0", className: "zero" },
-  { label: ".", className: "dot" },
   { label: "=", className: "equalOperator" }
 ].map((key, index) => ({ ...key, id: index }));
 

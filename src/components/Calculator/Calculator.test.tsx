@@ -32,12 +32,12 @@ beforeEach(() => {
 
   divisionOperator = screen.getByText(keys[2].label);
   multiplicationOperator = screen.getByText(keys[6].label);
-  additionOperator = screen.getByText(keys[keys.length - 4].label);
-  subtractionOperator = screen.getByText(keys[keys.length - 8].label);
+  additionOperator = screen.getByText(keys[keys.length - 3].label);
+  subtractionOperator = screen.getByText(keys[keys.length - 7].label);
   equalOperator = screen.getByText(keys[keys.length - 1].label);
 
-  twoKey = screen.getByText(keys[keys.length - 6].label);
-  threeKey = screen.getByText(keys[keys.length - 5].label);
+  twoKey = screen.getByText(keys[keys.length - 5].label);
+  threeKey = screen.getByText(keys[keys.length - 4].label);
   fourKey = screen.getByText(keys[7].label);
   fiveKey = screen.getByText(keys[8].label);
   sixKey = screen.getByText(keys[9].label);
@@ -53,7 +53,7 @@ describe("buttons appear on the UI and have the correct label", () => {
   beforeEach(() => (buttons = screen.getAllByRole("button")));
 
   test("18 buttons should appear on the screen", () => {
-    expect(buttons).toHaveLength(18);
+    expect(buttons).toHaveLength(17);
   });
 
   test("buttons have the correct label", () => {
@@ -135,14 +135,14 @@ describe("user typed one of the operators when value is 0 or any other number", 
   test("user typed +", () => {
     userEvent.click(additionOperator);
     expect(result.innerHTML).toBe(
-      `${initialResult}${keys[keys.length - 4].label}`
+      `${initialResult}${keys[keys.length - 3].label}`
     );
   });
 
   test("user typed -", () => {
     userEvent.click(subtractionOperator);
     expect(result.innerHTML).toBe(
-      `${initialResult}${keys[keys.length - 8].label}`
+      `${initialResult}${keys[keys.length - 7].label}`
     );
   });
 
