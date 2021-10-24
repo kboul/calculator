@@ -6,6 +6,7 @@ import {
   getAllExceptLastLetter,
   getArithmeticOperation,
   getLastLetter,
+  hasOperator,
   operators
 } from "./utils";
 import { initialResult, keys } from "./constants";
@@ -31,7 +32,13 @@ export default function Calculator() {
 
   const equalOperator = (label: string) => {
     const lastResultLetter = getLastLetter(result);
-    if (operators.includes(lastResultLetter) || result === "") return;
+    const resultHasOperator = hasOperator(result);
+    if (
+      operators.includes(lastResultLetter) ||
+      result === "" ||
+      !resultHasOperator
+    )
+      return;
 
     const arithmeticOperation = getArithmeticOperation(result, label);
     setResult(eval(arithmeticOperation).toString());

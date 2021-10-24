@@ -173,8 +173,10 @@ describe("user typed one of the operators when value is 0 or any other number", 
   });
 
   test("user typed =", () => {
-    userEvent.click(equalOperator);
-    expect(result.innerHTML).toBe(initialResult);
+    [twoKey, threeKey, equalOperator, fourKey].forEach(key =>
+      userEvent.click(key)
+    );
+    expect(result.innerHTML).toBe("234");
   });
 });
 

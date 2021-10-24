@@ -41,10 +41,14 @@ const adjustToKeyboardKeys = (label: string): string => {
   return label;
 };
 
+const hasOperator = (result: string): boolean =>
+  operators.some(oper => result.includes(oper));
+
 export {
   adjustToKeyboardKeys,
   getAllExceptLastLetter,
   getArithmeticOperation,
   getLastLetter,
+  hasOperator,
   operators
 };
