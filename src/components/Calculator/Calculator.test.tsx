@@ -52,7 +52,7 @@ describe("buttons appear on the UI and have the correct label", () => {
   let buttons: HTMLElement[];
   beforeEach(() => (buttons = screen.getAllByRole("button")));
 
-  test("18 buttons should appear on the screen", () => {
+  test("17 buttons should appear on the screen", () => {
     expect(buttons).toHaveLength(17);
   });
 
@@ -67,33 +67,59 @@ test("initial screen value is 0", () => {
   expect(result.innerHTML).toBe("0");
 });
 
-test("AC clears the result screen", () => {
-  userEvent.click(sevenKey);
-  userEvent.click(eightKey);
+describe("all clear key", () => {
+  test("AC clears the result screen", () => {
+    [sevenKey, eightKey, allClearKey].forEach(key => userEvent.click(key));
+    expect(result.innerHTML).toBe("");
+  });
 
-  expect(result.innerHTML).toBe("78");
-
-  userEvent.click(allClearKey);
-  expect(result.innerHTML).toBe("");
+  test("user hits AC key after making a calculation", () => {
+    [
+      twoKey,
+      multiplicationOperator,
+      eightKey,
+      equalOperator,
+      allClearKey
+    ].forEach(key => userEvent.click(key));
+    expect(result.innerHTML).toBe("");
+  });
 });
 
-test("C button clears only last screen's character", () => {
-  userEvent.click(nineKey);
-  userEvent.click(fourKey);
+describe("clear key", () => {
+  test("C button clears only last screen's character", () => {
+    [nineKey, fourKey, clearKey].forEach(key => userEvent.click(key));
+    expect(screen.getByLabelText("result").innerHTML).toBe("9");
+  });
 
-  expect(result.innerHTML).toBe("94");
+  test("user starts a new calculation after a result and uses C key before pressing equal", () => {
+    [
+      sixKey,
+      multiplicationOperator,
+      sevenKey,
+      equalOperator,
+      twoKey,
+      threeKey,
+      clearKey,
+      fiveKey,
+      subtractionOperator,
+      fourKey,
+      fiveKey,
+      clearKey,
+      eightKey
+    ].forEach(key => userEvent.click(key));
+    expect(result.innerHTML).toBe("25-48");
+  });
 
-  const clearButton = screen.getByText(keys[1].label);
-  userEvent.click(clearButton);
-  expect(screen.getByLabelText("result").innerHTML).toBe("9");
+  test("user clears a key after makign a calculation", () => {
+    [sixKey, multiplicationOperator, sevenKey, equalOperator, clearKey].forEach(
+      key => userEvent.click(key)
+    );
+    expect(result.innerHTML).toBe("4");
+  });
 });
 
 describe("user typed one of the operators when value is empty", () => {
-  let result: HTMLElement;
-  beforeEach(() => {
-    userEvent.click(allClearKey);
-    result = screen.getByLabelText("result");
-  });
+  beforeEach(() => userEvent.click(allClearKey));
 
   test("user typed ÷", () => {
     userEvent.click(divisionOperator);
@@ -147,22 +173,21 @@ describe("user typed one of the operators when value is 0 or any other number", 
   });
 
   test("user typed =", () => {
-    const equalOperator = screen.getByText(keys[keys.length - 1].label);
     userEvent.click(equalOperator);
     expect(result.innerHTML).toBe(initialResult);
   });
 });
 
 test("user can calculate via division", () => {
-  [sixKey, divisionOperator, threeKey, equalOperator].forEach(element =>
-    userEvent.click(element)
+  [sixKey, divisionOperator, threeKey, equalOperator].forEach(key =>
+    userEvent.click(key)
   );
   expect(result.innerHTML).toBe("2");
 });
 
 test("user can calculate via multiplication", () => {
-  [sixKey, multiplicationOperator, threeKey, equalOperator].forEach(element =>
-    userEvent.click(element)
+  [sixKey, multiplicationOperator, threeKey, equalOperator].forEach(key =>
+    userEvent.click(key)
   );
   expect(result.innerHTML).toBe("18");
 });
@@ -190,7 +215,7 @@ test("user performs multiple calculations correctly without receiving errors", (
     nineKey,
     sixKey,
     equalOperator
-  ].forEach(element => userEvent.click(element));
+  ].forEach(key => userEvent.click(key));
   expect(result.innerHTML).toBe("828.5862068965517");
 });
 
@@ -206,7 +231,7 @@ test("user types an operator multile times and last operator is changed with the
     fiveKey,
     divisionOperator,
     additionOperator
-  ].forEach(element => userEvent.click(element));
+  ].forEach(key => userEvent.click(key));
   expect(result.innerHTML).toBe("3×5+");
 });
 
@@ -218,7 +243,7 @@ test("user performs a calculation and after equal operator is clicked a new calc
     twoKey,
     clearKey,
     equalOperator
-  ].forEach(element => userEvent.click(element));
+  ].forEach(key => userEvent.click(key));
   expect(result.innerHTML).toBe("18");
   userEvent.click(twoKey);
   expect(result.innerHTML).toBe("2");
