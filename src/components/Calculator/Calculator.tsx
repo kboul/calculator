@@ -6,6 +6,7 @@ import {
   getAllExceptLastLetter,
   getArithmeticOperation,
   getLastLetter,
+  hasOperator,
   operators
 } from "./utils";
 import { initialResult, keys } from "./constants";
@@ -13,21 +14,35 @@ import "./Calculator.sass";
 
 export default function Calculator() {
   const [result, setResult] = useState(initialResult);
-  const [equalOperatorClicked, setEqualOperatorClicked] = useState(false);
+  const [startNewCalculation, setStartNewCalculation] = useState(false);
 
   keys.forEach(({ label }) => {
     useKeyPress(adjustToKeyboardKeys(label), () => handleKeyClick(label)());
   });
 
-  const clearOperator = () => setResult(getAllExceptLastLetter);
+  const allClearOperator = () => {
+    setResult("");
+    if (startNewCalculation) setStartNewCalculation(false);
+  };
+
+  const clearOperator = () => {
+    setResult(getAllExceptLastLetter);
+    if (startNewCalculation) setStartNewCalculation(false);
+  };
 
   const equalOperator = (label: string) => {
     const lastResultLetter = getLastLetter(result);
-    if (operators.includes(lastResultLetter) || result === "") return;
+    const resultHasOperator = hasOperator(result);
+    if (
+      operators.includes(lastResultLetter) ||
+      result === "" ||
+      !resultHasOperator
+    )
+      return;
 
     const arithmeticOperation = getArithmeticOperation(result, label);
     setResult(eval(arithmeticOperation).toString());
-    setEqualOperatorClicked(true);
+    setStartNewCalculation(true);
   };
 
   const changeResult = (label: string) => {
@@ -41,7 +56,7 @@ export default function Calculator() {
         prevResult => `${getAllExceptLastLetter(prevResult)}${label}`
       );
 
-    const userTypedAfterResult = equalOperatorClicked && !keyIsAnOperator;
+    const userTypedAfterResult = startNewCalculation && !keyIsAnOperator;
     setResult(prevResult => {
       if (
         userTypedAfterResult ||
@@ -51,13 +66,13 @@ export default function Calculator() {
       return prevResult + label;
     });
 
-    if (equalOperatorClicked) setEqualOperatorClicked(false);
+    if (startNewCalculation) setStartNewCalculation(false);
   };
 
   const handleKeyClick = (label: string) => () => {
     switch (label) {
       case keys[0].label:
-        return setResult("");
+        return allClearOperator();
       case keys[1].label:
         return clearOperator();
       case keys[keys.length - 1].label:
